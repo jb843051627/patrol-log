@@ -25,6 +25,9 @@ func New(db *gorm.DB) *Store {
 	return &Store{db: db}
 }
 
+// resultCache 最近一次查询结果的缓存（仅用于减少重复查询）
+var resultCache []model.Result
+
 // CreatePlan 创建巡检计划；同名计划返回 ErrDuplicateName
 func (s *Store) CreatePlan(p *model.Plan) error {
 	var count int64
@@ -71,7 +74,8 @@ func (s *Store) ListResults(deviceID string, since time.Time) ([]model.Result, e
 	if err != nil {
 		return nil, err
 	}
-	return rs, nil
+	resultCache = rs
+	return resultCache, nil
 }
 
 // ListAlerts 按设备查询告警记录（倒序）
