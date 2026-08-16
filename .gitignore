@@ -1,0 +1,6 @@
+# 忽略运行时产物
+patrol.db
+patrol.db-*
+
+# 全局常忽略 *.md，但 BENZHI_README.md 是交付物必须入库
+!BENZHI_README.md
