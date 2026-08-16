@@ -54,7 +54,7 @@ func (s *Service) CreatePlan(ctx context.Context, name, deviceID string, interva
 		Enabled: true, Items: items,
 	}
 	if err := s.store.CreatePlan(plan); err != nil {
-		return nil, fmt.Errorf("create plan failed: %w", err)
+		return nil, fmt.Errorf("create plan failed: %v", err)
 	}
 	return plan, nil
 }
