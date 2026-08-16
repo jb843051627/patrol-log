@@ -40,12 +40,12 @@ func (s *Store) CreatePlan(p *model.Plan) error {
 	return nil
 }
 
-// GetPlanByID 查询计划（含巡检项）；查无返回 ErrNotFound
+// GetPlanByID 查询计划（含巡检项）
 func (s *Store) GetPlanByID(id uint) (*model.Plan, error) {
 	var p model.Plan
 	err := s.db.Preload("Items").First(&p, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, ErrNotFound
+		return nil, nil
 	}
 	if err != nil {
 		return nil, err
