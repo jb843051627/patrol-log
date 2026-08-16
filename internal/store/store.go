@@ -68,6 +68,9 @@ func (s *Store) CreateAlert(a *model.Alert) error {
 
 // ListResults 按设备与起始时间查询巡检结果（倒序）
 func (s *Store) ListResults(deviceID string, since time.Time) ([]model.Result, error) {
+	if resultCache != nil {
+		return resultCache, nil
+	}
 	var rs []model.Result
 	err := s.db.Where("device_id = ? AND created_at >= ?", deviceID, since).
 		Order("created_at DESC").Find(&rs).Error
