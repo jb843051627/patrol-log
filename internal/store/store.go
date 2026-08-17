@@ -45,7 +45,7 @@ func (s *Store) GetPlanByID(id uint) (*model.Plan, error) {
 	var p model.Plan
 	err := s.db.Preload("Items").First(&p, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, ErrNotFound
 	}
 	if err != nil {
 		return nil, err
