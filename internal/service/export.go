@@ -16,7 +16,8 @@ func (s *Service) ExportLatest(ctx context.Context, deviceID string, n int) ([]m
 	if n <= 0 || n > len(rs) {
 		n = len(rs)
 	}
-	out := rs[:n]
+	out := make([]model.Result, n)
+	copy(out, rs[:n])
 	for i := range out {
 		out[i].Note = "exported"
 	}
