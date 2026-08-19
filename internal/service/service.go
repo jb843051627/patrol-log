@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"patrol-log/internal/model"
@@ -28,14 +29,21 @@ type Summary struct {
 }
 
 // 设备告警次数统计（内存态，仅用于快速查看）
-var alertCounts = map[string]int{}
+var (
+	alertMu     sync.Mutex
+	alertCounts = map[string]int{}
+)
 
 func recordAlert(deviceID string) {
+	alertMu.Lock()
 	alertCounts[deviceID]++
+	alertMu.Unlock()
 }
 
 // AlertCount 查询某设备的累计告警次数
 func AlertCount(deviceID string) int {
+	alertMu.Lock()
+	defer alertMu.Unlock()
 	return alertCounts[deviceID]
 }
 
