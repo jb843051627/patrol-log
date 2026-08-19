@@ -72,8 +72,12 @@ func (s *Service) ExecutePatrol(ctx context.Context, planID uint, deviceID strin
 	}
 	var total, abnormal int
 	for _, it := range plan.Items {
-		// 模拟单条写入耗时
-		time.Sleep(10 * time.Millisecond)
+		// 模拟单条写入耗时，期间感知取消
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(10 * time.Millisecond):
+		}
 		reading, ok := readings[it.Name]
 		if !ok {
 			continue
